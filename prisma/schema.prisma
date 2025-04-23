@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      Role     @default(PLAYER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  player    Player?
+  coach     Coach?
+}
+
+model Player {
+  id           String      @id @default(cuid())
+  userId       String      @unique
+  user         User        @relation(fields: [userId], references: [id])
+  position     String?
+  jerseyNumber Int?
+  stats        Stats[]
+  attendances  Training[]  @relation("PlayerTraining")
+  equipment    Equipment[]
+  teams        Team[]      @relation("PlayerTeam")
+  matchStats   MatchStats[]
+  transports   Transport[] @relation("PlayerTransport")
+}
+
+model Coach {
+  id       String   @id @default(cuid())
+  userId   String   @unique
+  user     User     @relation(fields: [userId], references: [id])
+  teams    Team[]
+}
+
+model Team {
+  id          String     @id @default(cuid())
+  name        String
+  coachId     String
+  coach       Coach      @relation(fields: [coachId], references: [id])
+  players     Player[]   @relation("PlayerTeam")
+  trainings   Training[]
+  homeMatches Match[]    @relation("HomeTeam")
+  awayMatches Match[]    @relation("AwayTeam")
+}
+
+model Training {
+  id          String     @id @default(cuid())
+  date        DateTime
+  teamId      String
+  team        Team       @relation(fields: [teamId], references: [id])
+  attendees   Player[]   @relation("PlayerTraining")
+  location    String
+  description String?
+}
+
+model Equipment {
+  id          String   @id @default(cuid())
+  type        String
+  status      String
+  condition   String
+  assignedTo  Player?  @relation(fields: [playerId], references: [id])
+  playerId    String?
+  assignedAt  DateTime?
+}
+
+model Match {
+  id          String       @id @default(cuid())
+  date        DateTime
+  location    String
+  homeTeam    Team         @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  homeTeamId  String
+  awayTeam    Team         @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  awayTeamId  String
+  homeScore   Int          @default(0)
+  awayScore   Int          @default(0)
+  status      MatchStatus  @default(SCHEDULED)
+  matchStats  MatchStats[]
+}
+
+model MatchStats {
+  id          String   @id @default(cuid())
+  match       Match    @relation(fields: [matchId], references: [id])
+  matchId     String
+  player      Player   @relation(fields: [playerId], references: [id])
+  playerId    String
+  points      Int      @default(0)
+  rebounds    Int      @default(0)
+  assists     Int      @default(0)
+  mvp         Boolean  @default(false)
+}
+
+model Transport {
+  id          String     @id @default(cuid())
+  date        DateTime
+  type        String
+  departure   String
+  destination String
+  capacity    Int
+  passengers  Player[]   @relation("PlayerTransport")
+}
+
+model Stats {
+  id        String   @id @default(cuid())
+  player    Player   @relation(fields: [playerId], references: [id])
+  playerId  String
+  date      DateTime
+  points    Int      @default(0)
+  rebounds  Int      @default(0)
+  assists   Int      @default(0)
+}
+
+enum MatchStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  POSTPONED
+}
+
+enum Role {
+  ADMIN
+  COACH
+  PLAYER
+}

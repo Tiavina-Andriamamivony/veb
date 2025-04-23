@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: VEB API
+  version: 1.0.0
+  description: API for Vohitsara École de Basket management system
+
+paths:
+  /api/players:
+    get:
+      summary: Get all players
+      responses:
+        200:
+          description: List of players
+    post:
+      summary: Create a new player
+      responses:
+        201:
+          description: Player created
+
+  /api/players/{id}:
+    get:
+      summary: Get player details and stats
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Player details with stats
+
+  /api/trainings:
+    get:
+      summary: Get all trainings
+      responses:
+        200:
+          description: List of trainings
+    post:
+      summary: Create training session
+      responses:
+        201:
+          description: Training created
+
+  /api/trainings/{id}/attendance:
+    post:
+      summary: Mark player attendance
+      responses:
+        200:
+          description: Attendance recorded
+
+  /api/equipment:
+    get:
+      summary: Get all equipment
+      responses:
+        200:
+          description: List of equipment
+    post:
+      summary: Add new equipment
+      responses:
+        201:
+          description: Equipment added
+
+  /api/transport:
+    get:
+      summary: Get transport arrangements
+      responses:
+        200:
+          description: List of transport arrangements
+    post:
+      summary: Create transport arrangement
+      responses:
+        201:
+          description: Transport created

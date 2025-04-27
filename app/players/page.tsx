@@ -1,26 +1,34 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { PrismaClient } from "@prisma/client";
 import { Shirt, MapPin, Calendar, User2, Trophy, Users } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
-const prisma = new PrismaClient();
+async function getPlayers() {
+  const res = await fetch('http://localhost:3000/api/players', {
+    cache: 'no-store'
+  });
+  
+  if (!res.ok) {
+    throw new Error('Échec du chargement des joueurs');
+  }
+  
+  return res.json();
+}
 
 export default async function PlayersPage() {
-  const players = await prisma.player.findMany({
-    include: {
-      user: true,
-      teams: true,
-      stats: {
-        orderBy: {
-          date: 'desc'
-        },
-        take: 1
-      }
-    }
-  });
+  const players = await getPlayers();
+
+  if (!players) {
+    return (
+      <div className="container mx-auto p-6">
+        <div className="text-center">
+          <p>Aucun joueur trouvé</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6">
@@ -32,7 +40,7 @@ export default async function PlayersPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {players.map((player) => (
+        {Array.isArray(players) && players.map((player) => (
           <Card
             key={player.id}
             className="hover:shadow-lg transition-shadow duration-200"

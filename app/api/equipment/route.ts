@@ -25,9 +25,11 @@ export async function POST(request: Request) {
     const body = await request.json();
     const equipment = await prisma.equipment.create({
       data: {
+        name: body.name,
         type: body.type,
         status: body.status,
         condition: body.condition,
+        purchaseDate: new Date(body.purchaseDate),
         playerId: body.playerId,
         assignedAt: body.playerId ? new Date() : null,
       },

@@ -8,40 +8,51 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  role      Role     @default(PLAYER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  player    Player?
-  coach     Coach?
+  id            String   @id @default(cuid())
+  email         String   @unique
+  firstName     String
+  lastName      String
+  profileImage  String?  // URL or path to the profile image
+  role          Role     @default(PLAYER)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  player        Player?
+  coach         Coach?
 }
 
 model Player {
-  id           String      @id @default(cuid())
-  userId       String      @unique
-  user         User        @relation(fields: [userId], references: [id])
-  position     String?
-  jerseyNumber Int?
-  stats        Stats[]
-  attendances  Training[]  @relation("PlayerTraining")
-  equipment    Equipment[]
-  teams        Team[]      @relation("PlayerTeam")
-  matchStats   MatchStats[]
-  transports   Transport[] @relation("PlayerTransport")
+  id            String       @id @default(cuid())
+  userId        String       @unique
+  user          User         @relation(fields: [userId], references: [id])
+  birthDate     DateTime
+  gender        Gender
+  category      Category
+  position      String?
+  jerseyNumber  Int?
+  licenseDate   DateTime
+  licenseExpiry DateTime     // Removed the default expression
+  isActive      Boolean      @default(true)
+  stats         Stats[]
+  attendances   Training[]   @relation("PlayerTraining")
+  equipment     Equipment[]
+  teams         Team[]       @relation("PlayerTeam")
+  matchStats    MatchStats[]
+  transports    Transport[]  @relation("PlayerTransport")
 }
 
 model Coach {
-  id       String   @id @default(cuid())
-  userId   String   @unique
-  user     User     @relation(fields: [userId], references: [id])
-  teams    Team[]
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  licenseDate DateTime
+  teams       Team[]
 }
 
 model Team {
   id          String     @id @default(cuid())
   name        String
+  category    Category
+  season      String
   coachId     String
   coach       Coach      @relation(fields: [coachId], references: [id])
   players     Player[]   @relation("PlayerTeam")
@@ -51,37 +62,45 @@ model Team {
 }
 
 model Training {
-  id          String     @id @default(cuid())
+  id          String    @id @default(cuid())
   date        DateTime
+  startTime   DateTime
+  endTime     DateTime
   teamId      String
-  team        Team       @relation(fields: [teamId], references: [id])
-  attendees   Player[]   @relation("PlayerTraining")
+  team        Team      @relation(fields: [teamId], references: [id])
+  attendees   Player[]  @relation("PlayerTraining")
   location    String
   description String?
+  type        TrainingType
 }
 
 model Equipment {
-  id          String   @id @default(cuid())
-  type        String
-  status      String
+  id          String    @id @default(cuid())
+  name        String
+  type        EquipmentType
+  status      EquipmentStatus
   condition   String
-  assignedTo  Player?  @relation(fields: [playerId], references: [id])
+  assignedTo  Player?   @relation(fields: [playerId], references: [id])
   playerId    String?
   assignedAt  DateTime?
+  purchaseDate DateTime
+  lastMaintenance DateTime?
 }
 
 model Match {
-  id          String       @id @default(cuid())
+  id          String      @id @default(cuid())
   date        DateTime
   location    String
-  homeTeam    Team         @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  homeTeam    Team        @relation("HomeTeam", fields: [homeTeamId], references: [id])
   homeTeamId  String
-  awayTeam    Team         @relation("AwayTeam", fields: [awayTeamId], references: [id])
+  awayTeam    Team        @relation("AwayTeam", fields: [awayTeamId], references: [id])
   awayTeamId  String
-  homeScore   Int          @default(0)
-  awayScore   Int          @default(0)
-  status      MatchStatus  @default(SCHEDULED)
+  homeScore   Int         @default(0)
+  awayScore   Int         @default(0)
+  status      MatchStatus @default(SCHEDULED)
   matchStats  MatchStats[]
+  quarter     Int         @default(1)
+  notes       String?
 }
 
 model MatchStats {
@@ -93,17 +112,47 @@ model MatchStats {
   points      Int      @default(0)
   rebounds    Int      @default(0)
   assists     Int      @default(0)
+  steals      Int      @default(0)
+  blocks      Int      @default(0)
+  fouls       Int      @default(0)
   mvp         Boolean  @default(false)
+  playingTime Int      @default(0)
 }
 
 model Transport {
-  id          String     @id @default(cuid())
+  id            String       @id @default(cuid())
+  vehicleId     String      @unique
+  name          String
+  type          VehicleType
+  model         String
+  registration  String
+  capacity      Int
+  maintenance   TransportMaintenance[]
+  usage         TransportUsage[]
+  passengers    Player[]     @relation("PlayerTransport")
+}
+
+model TransportMaintenance {
+  id          String    @id @default(cuid())
+  transport   Transport @relation(fields: [transportId], references: [id])
+  transportId String
   date        DateTime
-  type        String
-  departure   String
-  destination String
-  capacity    Int
-  passengers  Player[]   @relation("PlayerTransport")
+  type        MaintenanceType
+  cost        Float
+  description String?
+  mileage     Float?
+  nextDueDate DateTime?
+}
+
+model TransportUsage {
+  id          String    @id @default(cuid())
+  transport   Transport @relation(fields: [transportId], references: [id])
+  transportId String
+  date        DateTime
+  distance    Float
+  purpose     String
+  fuelCost    Float
+  totalCost   Float
 }
 
 model Stats {
@@ -114,6 +163,32 @@ model Stats {
   points    Int      @default(0)
   rebounds  Int      @default(0)
   assists   Int      @default(0)
+  steals    Int      @default(0)
+  blocks    Int      @default(0)
+}
+
+enum Role {
+  ADMIN
+  COACH
+  PLAYER
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum Category {
+  N1A
+  N1B
+  U20
+  U18
+  U16
+  U14
+  U12
+  U10
+  MINI_BASKET
 }
 
 enum MatchStatus {
@@ -124,8 +199,44 @@ enum MatchStatus {
   POSTPONED
 }
 
-enum Role {
-  ADMIN
-  COACH
-  PLAYER
+enum TrainingType {
+  PHYSICAL
+  TECHNICAL
+  TACTICAL
+  SCRIMMAGE
+  RECOVERY
+}
+
+enum EquipmentType {
+  BALL
+  JERSEY
+  SHOES
+  TRAINING_KIT
+  MEDICAL
+  OTHER
+}
+
+enum EquipmentStatus {
+  AVAILABLE
+  IN_USE
+  MAINTENANCE
+  RETIRED
+}
+
+enum VehicleType {
+  BUS
+  MINIBUS
+  TUK_TUK
+  CAR
+  OTHER
+}
+
+enum MaintenanceType {
+  FUEL
+  REPAIR
+  INSPECTION
+  OIL_CHANGE
+  TIRE_CHANGE
+  INSURANCE
+  OTHER
 }

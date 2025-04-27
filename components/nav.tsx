@@ -9,7 +9,7 @@ import { Badge } from "./ui/badge"
 export function Nav() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <nav className="container flex h-16 items-center justify-between">
+      <nav className="container mx-auto max-w-7xl px-4 flex h-16 items-center justify-between">
         <Link href="/" className="flex items-center space-x-3 transition-all hover:opacity-80">
           <Image
             src="/vebSimple.png"
@@ -31,11 +31,16 @@ export function Nav() {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="ghost" className="group">
+                  <Link href="/players" className="m-auto p-auto flex">
                   <Trophy className="mr-2 h-4 w-4 group-hover:text-orange-500" />
                   Joueurs
+                  </Link>
+                 
+
+
                 </Button>
               </HoverCardTrigger>
-              <HoverCardContent className="w-80">
+             <HoverCardContent className="w-80">
                 <div className="space-y-2">
                   <h4 className="text-sm font-semibold">Gestion des joueurs</h4>
                   <p className="text-sm text-muted-foreground">
@@ -48,9 +53,11 @@ export function Nav() {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="ghost" className="group">
+                <Link href="/trainings" className="m-auto p-auto flex">
                   <Calendar className="mr-2 h-4 w-4 group-hover:text-orange-500" />
                   Entraînements
                   <Badge variant="secondary" className="ml-2">New</Badge>
+                  </Link>
                 </Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-80">
@@ -64,13 +71,17 @@ export function Nav() {
             </HoverCard>
 
             <Button variant="ghost" className="group">
+            <Link href="/equipment" className="m-auto p-auto flex">
               <Box className="mr-2 h-4 w-4 group-hover:text-orange-500" />
               Équipement
+              </Link>
             </Button>
 
             <Button variant="ghost" className="group">
+            <Link href="/transport" className="m-auto p-auto flex">
               <Truck className="mr-2 h-4 w-4 group-hover:text-orange-500" />
               Transport
+              </Link>
             </Button>
           </div>
 

@@ -8,9 +8,11 @@ export async function GET() {
     const players = await prisma.player.findMany({
       include: {
         user: true,
-        stats: true,
         teams: true,
+        stats: true,
+        matchStats: true,
         equipment: true,
+        attendances: true,
       },
     });
     return NextResponse.json(players);
@@ -27,12 +29,19 @@ export async function POST(request: Request) {
         user: {
           create: {
             email: body.email,
-            name: body.name,
+            firstName: body.firstName,
+            lastName: body.lastName,
             role: 'PLAYER',
+            profileImage: body.profileImage,
           },
         },
+        birthDate: new Date(body.birthDate),
+        gender: body.gender,
+        category: body.category,
         position: body.position,
         jerseyNumber: body.jerseyNumber,
+        licenseDate: new Date(body.licenseDate),
+        licenseExpiry: new Date(new Date(body.licenseDate).setFullYear(new Date(body.licenseDate).getFullYear() + 4)),
       },
       include: {
         user: true,

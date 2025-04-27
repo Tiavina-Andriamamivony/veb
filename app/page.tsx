@@ -27,10 +27,10 @@ export default function Home() {
                 className="h-auto w-auto animate-float"
                 priority
               />
-              <div className="absolute -inset-4 bg-gradient-to-r from-orange-500/20 to-red-500/20 blur-3xl -z-10" />
+              <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/20 to-indigo-500/20 blur-3xl -z-10" />
             </div>
             <div className="space-y-4">
-              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
                 Vohitsara École de Basket
               </h1>
               <p className="text-muted-foreground max-w-[600px] mx-auto md:text-lg">

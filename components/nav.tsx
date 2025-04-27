@@ -19,7 +19,7 @@ export function Nav() {
             className="h-10 w-auto rounded-lg"
           />
           <div className="hidden md:block">
-            <h1 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-red-600 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
               Vohitsara École de Basket
             </h1>
             <p className="text-xs text-muted-foreground">Excellence & Passion</p>
@@ -32,15 +32,12 @@ export function Nav() {
               <HoverCardTrigger asChild>
                 <Button variant="ghost" className="group">
                   <Link href="/players" className="m-auto p-auto flex">
-                  <Trophy className="mr-2 h-4 w-4 group-hover:text-orange-500" />
-                  Joueurs
+                    <Trophy className="mr-2 h-4 w-4 group-hover:text-blue-500" />
+                    Joueurs
                   </Link>
-                 
-
-
                 </Button>
               </HoverCardTrigger>
-             <HoverCardContent className="w-80">
+              <HoverCardContent className="w-80">
                 <div className="space-y-2">
                   <h4 className="text-sm font-semibold">Gestion des joueurs</h4>
                   <p className="text-sm text-muted-foreground">
@@ -53,10 +50,10 @@ export function Nav() {
             <HoverCard>
               <HoverCardTrigger asChild>
                 <Button variant="ghost" className="group">
-                <Link href="/trainings" className="m-auto p-auto flex">
-                  <Calendar className="mr-2 h-4 w-4 group-hover:text-orange-500" />
-                  Entraînements
-                  <Badge variant="secondary" className="ml-2">New</Badge>
+                  <Link href="/trainings" className="m-auto p-auto flex">
+                    <Calendar className="mr-2 h-4 w-4 group-hover:text-blue-500" />
+                    Entraînements
+                    <Badge variant="secondary" className="ml-2 bg-blue-500/10 text-blue-600">New</Badge>
                   </Link>
                 </Button>
               </HoverCardTrigger>
@@ -71,25 +68,25 @@ export function Nav() {
             </HoverCard>
 
             <Button variant="ghost" className="group">
-            <Link href="/equipment" className="m-auto p-auto flex">
-              <Box className="mr-2 h-4 w-4 group-hover:text-orange-500" />
-              Équipement
+              <Link href="/equipment" className="m-auto p-auto flex">
+                <Box className="mr-2 h-4 w-4 group-hover:text-blue-500" />
+                Équipement
               </Link>
             </Button>
 
             <Button variant="ghost" className="group">
-            <Link href="/transport" className="m-auto p-auto flex">
-              <Truck className="mr-2 h-4 w-4 group-hover:text-orange-500" />
-              Transport
+              <Link href="/transport" className="m-auto p-auto flex">
+                <Truck className="mr-2 h-4 w-4 group-hover:text-blue-500" />
+                Transport
               </Link>
             </Button>
           </div>
 
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button variant="outline" size="icon" className="rounded-full hover:bg-blue-500/10 hover:text-blue-500">
               <User className="h-4 w-4" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-full text-red-500">
+            <Button variant="ghost" size="icon" className="rounded-full text-red-500 hover:bg-red-500/10">
               <LogOut className="h-4 w-4" />
             </Button>
           </div>
@@ -102,21 +99,21 @@ export function Nav() {
             </SheetTrigger>
             <SheetContent side="right" className="w-80">
               <div className="flex flex-col space-y-4 mt-6">
-                <Button variant="ghost" className="justify-start">
+                <Button variant="ghost" className="justify-start hover:text-blue-500">
                   <Trophy className="mr-2 h-4 w-4" />
                   Joueurs
                 </Button>
-                <Button variant="ghost" className="justify-start">
+                <Button variant="ghost" className="justify-start hover:text-blue-500">
                   <Calendar className="mr-2 h-4 w-4" />
                   Entraînements
-                  <Badge variant="secondary" className="ml-2">New</Badge>
+                  <Badge variant="secondary" className="ml-2 bg-blue-500/10 text-blue-600">New</Badge>
                 </Button>
-                <Button variant="ghost" className="justify-start">
+                <Button variant="ghost" className="justify-start hover:text-blue-500">
                   <Box className="mr-2 h-4 w-4" />
                   Équipement
                 </Button>
-                <Button variant="ghost" className="justify-start">
-                  <Trophy className="mr-2 h-4 w-4" />
+                <Button variant="ghost" className="justify-start hover:text-blue-500">
+                  <Truck className="mr-2 h-4 w-4" />
                   Transport
                 </Button>
               </div>

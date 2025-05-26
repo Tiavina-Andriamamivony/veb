@@ -48,14 +48,7 @@ export default async function PlayersPage() {
 
   return (
     <div className="container mx-auto p-6 space-y-8">
-      <Breadcrumb>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Accueil</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbItem>
-          <BreadcrumbLink>Joueurs</BreadcrumbLink>
-        </BreadcrumbItem>
-      </Breadcrumb>
+  
 
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <div>
